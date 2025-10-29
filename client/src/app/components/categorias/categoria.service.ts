@@ -1,24 +1,51 @@
-import { inject, Injectable } from "@angular/core";
-import { environment } from "../../../environments/environment.development";
-import { HttpClient } from "@angular/common/http";
-import { map, Observable } from "rxjs";
-import { CadastrarCategoriaModel, CadastrarCategoriaResponseModel, ListagemCategoriasApiResponse, ListagemCategoriasModel } from "./categoria.models";
+import { map, Observable } from 'rxjs';
 
-@Injectable({
-  providedIn: 'root'
-})
-export class CategoriaService{
+import { HttpClient } from '@angular/common/http';
+import { inject, Injectable } from '@angular/core';
+
+import { environment } from '../../../environments/environment';
+import {
+    CadastrarCategoriaModel, CadastrarCategoriaResponseModel, DetalhesCategoriaModel,
+    EditarCategoriaModel, EditarCategoriaResponseModel, ListagemCategoriasApiResponse,
+    ListagemCategoriasModel
+} from './categoria.models';
+
+@Injectable()
+export class CategoriaService {
   private readonly http = inject(HttpClient);
 
   private readonly apiUrl = environment.apiUrl + '/categorias';
 
-  public cadastrar(categoriaModel: CadastrarCategoriaModel): Observable<CadastrarCategoriaResponseModel>{
-    return this.http.post<CadastrarCategoriaResponseModel>(this.apiUrl, categoriaModel)
+  public cadastrar(
+    categoriaModel: CadastrarCategoriaModel,
+  ): Observable<CadastrarCategoriaResponseModel> {
+    return this.http.post<CadastrarCategoriaResponseModel>(this.apiUrl, categoriaModel);
   }
 
-  public selecionarTodas(): Observable<ListagemCategoriasModel[]>{
-    return this.http.get<ListagemCategoriasApiResponse>(this.apiUrl).pipe(
-      map(res => res.registros)
-    )
+  public editar(
+    id: string,
+    editarCategoriaModel: EditarCategoriaModel,
+  ): Observable<EditarCategoriaResponseModel> {
+    const urlCompleto = `${this.apiUrl}/${id}`;
+
+    return this.http.put<EditarCategoriaResponseModel>(urlCompleto, editarCategoriaModel);
+  }
+
+  public excluir(id: string): Observable<null> {
+    const urlCompleto = `${this.apiUrl}/${id}`;
+
+    return this.http.delete<null>(urlCompleto);
+  }
+
+  public selecionarPorId(id: string): Observable<DetalhesCategoriaModel> {
+    const urlCompleto = `${this.apiUrl}/${id}`;
+
+    return this.http.get<DetalhesCategoriaModel>(urlCompleto);
+  }
+
+  public selecionarTodas(): Observable<ListagemCategoriasModel[]> {
+    return this.http
+      .get<ListagemCategoriasApiResponse>(this.apiUrl)
+      .pipe(map((res) => res.registros));
   }
 }
