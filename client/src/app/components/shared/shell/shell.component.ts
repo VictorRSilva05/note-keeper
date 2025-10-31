@@ -1,14 +1,18 @@
-import { Component, inject } from '@angular/core';
+import { Observable } from 'rxjs';
+import { map, shareReplay } from 'rxjs/operators';
+
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { AsyncPipe } from '@angular/common';
-import { MatToolbarModule } from '@angular/material/toolbar';
+import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
-import { MatSidenavModule } from '@angular/material/sidenav';
-import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
-import { Observable } from 'rxjs';
-import { map, shareReplay, tap } from 'rxjs/operators';
+import { MatListModule } from '@angular/material/list';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterLink } from '@angular/router';
+
+import { UsuarioAutenticadoModel } from '../../auth/auth.models';
 
 @Component({
   selector: 'app-shell',
@@ -20,6 +24,7 @@ import { RouterLink } from '@angular/router';
     MatSidenavModule,
     MatListModule,
     MatIconModule,
+    MatMenuModule,
     AsyncPipe,
     RouterLink,
   ],
@@ -27,17 +32,19 @@ import { RouterLink } from '@angular/router';
 export class ShellComponent {
   private breakpointObserver = inject(BreakpointObserver);
 
-  isHandset$: Observable<boolean> = this.breakpointObserver
+  public isHandset$: Observable<boolean> = this.breakpointObserver
     .observe([Breakpoints.XSmall, Breakpoints.Small, Breakpoints.Handset])
     .pipe(
       map((result) => result.matches),
-      tap((matches) => console.log(matches)),
-      shareReplay()
+      shareReplay(),
     );
 
-  itensNavbar = [
+  public itensNavbar = [
     { titulo: 'Início', icone: 'home', link: '/inicio' },
     { titulo: 'Categorias', icone: 'label', link: '/categorias' },
-    { titulo: 'Início', icone: 'collections_bookmark', link: '/notas' },
+    { titulo: 'Notas', icone: 'collections_bookmark', link: '/notas' },
   ];
+
+  @Input({ required: true }) usuarioAutenticado!: UsuarioAutenticadoModel;
+  @Output() logoutRequisitado = new EventEmitter<void>();
 }
