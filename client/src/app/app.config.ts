@@ -1,11 +1,7 @@
-import { map } from 'rxjs';
+import { map, take } from 'rxjs';
 
-import { provideHttpClient } from '@angular/common/http';
 import {
-  ApplicationConfig,
-  inject,
-  provideBrowserGlobalErrorListeners,
-  provideZonelessChangeDetection,
+    ApplicationConfig, inject, provideBrowserGlobalErrorListeners, provideZonelessChangeDetection
 } from '@angular/core';
 import { CanActivateFn, provideRouter, Router, Routes } from '@angular/router';
 
@@ -13,12 +9,12 @@ import { provideAuth } from './components/auth/auth.provider';
 import { AuthService } from './components/auth/auth.service';
 import { provideNotifications } from './components/shared/notificacao/notificacao.provider';
 
-// retorna verdadeiro quando EXISTE um usuário autenticado
 const usuarioDesconhecidoGuard: CanActivateFn = () => {
   const authService = inject(AuthService);
   const router = inject(Router);
 
   return authService.accessToken$.pipe(
+    take(1),
     map((token) => (!token ? true : router.createUrlTree(['/inicio']))),
   );
 };
@@ -28,6 +24,7 @@ const usuarioAutenticadoGuard: CanActivateFn = () => {
   const router = inject(Router);
 
   return authService.accessToken$.pipe(
+    take(1),
     map((token) => (token ? true : router.createUrlTree(['/auth/login']))),
   );
 };
