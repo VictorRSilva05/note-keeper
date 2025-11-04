@@ -29,7 +29,6 @@ export class CategoriaService {
     return this.http.post<CadastrarCategoriaResponseModel>(
       this.apiUrl,
       categoriaModel,
-      obterOpcoesHeaderAutorizacao(this.authService.accessTokenSubject$.getValue()),
     );
   }
 
@@ -42,7 +41,6 @@ export class CategoriaService {
     return this.http.put<EditarCategoriaResponseModel>(
       urlCompleto,
       editarCategoriaModel,
-      obterOpcoesHeaderAutorizacao(this.authService.accessTokenSubject$.getValue()),
     );
   }
 
@@ -51,7 +49,6 @@ export class CategoriaService {
 
     return this.http.delete<null>(
       urlCompleto,
-      obterOpcoesHeaderAutorizacao(this.authService.accessTokenSubject$.getValue()),
     );
   }
 
@@ -60,7 +57,6 @@ export class CategoriaService {
 
     return this.http.get<DetalhesCategoriaModel>(
       urlCompleto,
-      obterOpcoesHeaderAutorizacao(this.authService.accessTokenSubject$.getValue()),
     );
   }
 
@@ -68,7 +64,6 @@ export class CategoriaService {
     return this.http
       .get<ListagemCategoriasApiResponse>(
         this.apiUrl,
-        obterOpcoesHeaderAutorizacao(this.authService.accessTokenSubject$.getValue()),
       )
       .pipe(map((res) => res.registros));
   }

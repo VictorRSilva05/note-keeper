@@ -27,7 +27,6 @@ export class NotaService {
     return this.http.post<CadastrarNotaResponseModel>(
       this.apiUrl,
       notaModel,
-      obterOpcoesHeaderAutorizacao(this.authService.accessTokenSubject$.getValue()),
     );
   }
 
@@ -37,7 +36,6 @@ export class NotaService {
     return this.http.put<EditarNotaResponseModel>(
       urlCompleto,
       notaModel,
-      obterOpcoesHeaderAutorizacao(this.authService.accessTokenSubject$.getValue()),
     );
   }
 
@@ -46,7 +44,6 @@ export class NotaService {
 
     return this.http.delete<null>(
       urlCompleto,
-      obterOpcoesHeaderAutorizacao(this.authService.accessTokenSubject$.getValue()),
     );
   }
 
@@ -55,7 +52,6 @@ export class NotaService {
 
     return this.http.get<DetalhesNotaModel>(
       urlCompleto,
-      obterOpcoesHeaderAutorizacao(this.authService.accessTokenSubject$.getValue()),
     );
   }
 
@@ -63,7 +59,6 @@ export class NotaService {
     return this.http
       .get<ListagemNotasApiResponse>(
         this.apiUrl,
-        obterOpcoesHeaderAutorizacao(this.authService.accessTokenSubject$.getValue()),
       )
       .pipe(map((res) => res.registros));
   }
