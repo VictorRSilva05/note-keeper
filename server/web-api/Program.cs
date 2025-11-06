@@ -31,7 +31,6 @@ public class Program
 
         var app = builder.Build();
 
-
         var scope = app.Services.CreateScope();
 
         var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
